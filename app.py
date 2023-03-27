@@ -3,6 +3,7 @@ import datascrape
 import infoprompt
 import news
 import yfinance as yf
+import gptprompt
 
 app = Flask(__name__)
 
@@ -17,13 +18,14 @@ def fetchData():
         ticker = yf.Ticker(company["code"])
         updatedCompanies.append(ticker.info)
     
-    intitialMarketPrompt = infoprompt.infoPrompt(updatedCompanies, industry)
     newsInfo = news.newsInfo(updatedCompanies, industry)
+    newsPrompt = infoprompt.newsPrompt(newsInfo, industry)
+    marketPrompt = infoprompt.infoPrompt(updatedCompanies, industry)
+    aiInitAnswer = gptprompt.aiInitPrompt(newsPrompt, marketPrompt, industry)
+
     return jsonify(updatedCompanies)
 
 
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-
