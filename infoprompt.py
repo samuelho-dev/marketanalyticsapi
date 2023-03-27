@@ -1,14 +1,29 @@
 from datetime import date
 import pandas as pd
 
-def infoPrompt(infoList, industry) :
-  marketprompt = f'The top {industry} 50 companies have the following information : '
-  for idx, company in enumerate(infoList) :
-    longName = company["longName"]
-    symbol = company["symbol"]
-    epsCurrentYear = company["epsCurrentYear"]
-    marketCap = company["marketCap"]
+def infoPrompt(infoList, industry):
     today = date.today()
-    prompt = f'#{idx + 1} company, {longName} with the symbol {symbol}, has the following stats as of {today}: Market Cap: {marketCap}, eps: {epsCurrentYear}. '
-    marketprompt += prompt
-  return marketprompt
+    marketprompt = f'This is the top {industry} companies as of {today}. Here are some key stats:\n'
+    for idx, company in enumerate(infoList):
+        longName = company["longName"]
+        symbol = company["symbol"]
+        epsCurrentYear = company["epsCurrentYear"]
+        marketCap = company["marketCap"]
+        prompt = f'{idx + 1}. {longName} ({symbol}): Market Cap: {marketCap}, EPS: {epsCurrentYear}. \n'
+        marketprompt += prompt
+    return marketprompt
+
+
+def newsPrompt(articles, industry) :
+  
+  newsprompt = f'These are the news articles for the {industry} industry companies: \n'
+  for article in articles: 
+    sourceName = article['sourceName']
+    author = article['author']
+    title = article['title']
+    description = article['description']
+    content = article['content']
+    prompt = f'This is an article from {sourceName} by {author}, the title is {title}. Here is the short description: {description}. This is the content: {content} \n'
+    newsprompt += prompt
+  return newsprompt
+
