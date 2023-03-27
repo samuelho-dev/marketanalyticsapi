@@ -1,5 +1,4 @@
 from datetime import date
-import pandas as pd
 
 def infoPrompt(infoList, industry):
     today = date.today()

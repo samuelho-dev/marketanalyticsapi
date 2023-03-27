@@ -23,7 +23,7 @@ def fetchData():
     marketPrompt = infoprompt.infoPrompt(updatedCompanies, industry)
     aiInitAnswer = gptprompt.aiInitPrompt(newsPrompt, marketPrompt, industry)
 
-    return jsonify(updatedCompanies)
+    return jsonify({'answer' : aiInitAnswer})
 
 
 
