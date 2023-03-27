@@ -33,7 +33,6 @@ def newsInfo(updatedCompanies, industry):
                     "description": article["description"],
                     "content": article["content"],
                 }
-                print(obj)
                 data.append(obj)
 
     return data
