@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
 import datascrape
 import infoprompt
+import news
 import yfinance as yf
 
 app = Flask(__name__)
@@ -8,16 +9,16 @@ app = Flask(__name__)
 
 @app.route("/")  # /market/<marketid>
 def fetchData():
-    topCompanies = datascrape.topCompanies("real-estate")
+    industry = "real-estate"
+    topCompanies = datascrape.topCompanies(industry)
     
     updatedCompanies = []
     for company in topCompanies:
         ticker = yf.Ticker(company["code"])
-        companyData = {"name": company["name"], "code": company["code"], "data": ticker.info}
-        updatedCompanies.append(companyData)
+        updatedCompanies.append(ticker.info)
     
-    infoprompt.infoPrompt(updatedCompanies)
-    
+    intitialMarketPrompt = infoprompt.infoPrompt(updatedCompanies, industry)
+    newsInfo = news.newsInfo(updatedCompanies, industry)
     return jsonify(updatedCompanies)
 
 
