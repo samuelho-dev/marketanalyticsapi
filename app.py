@@ -4,27 +4,34 @@ import infoprompt
 import news
 import yfinance as yf
 import gptprompt
+import requests
 
 app = Flask(__name__)
 
 
-@app.route("/")  # /market/<marketid>
-def fetchData():
-    industry = "real-estate"
+@app.route("/market/<marketid>", methods=["GET"])
+def fetchData(marketid):
+    industry = marketid
     topCompanies = datascrape.topCompanies(industry)
-    
+
     updatedCompanies = []
     for company in topCompanies:
         ticker = yf.Ticker(company["code"])
         updatedCompanies.append(ticker.info)
-    
+
     newsInfo = news.newsInfo(updatedCompanies, industry)
     newsPrompt = infoprompt.newsPrompt(newsInfo, industry)
     marketPrompt = infoprompt.infoPrompt(updatedCompanies, industry)
     aiInitAnswer = gptprompt.aiInitPrompt(newsPrompt, marketPrompt, industry)
 
-    return jsonify({'answer' : aiInitAnswer})
+    return jsonify({"answer": aiInitAnswer})
 
+
+@app.route("/market/<marketid>", methods=["POST"])
+def chat(marketid):
+    prompt = requests.json()
+    answer = gptprompt.continuePrompt(prompt)
+    return jsonify({"answer": answer})
 
 
 if __name__ == "__main__":
