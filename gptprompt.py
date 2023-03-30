@@ -20,17 +20,24 @@ def startPrompt(prompt):
         temperature=0.5,
     )
 
-    message = completion.choices[0].message
+    if completion.choices:
+        message = completion.choices[0].text
+    else:
+        message = "Error: No response from GPT-3 API"
 
     return message
 
 
 def continuePrompt(prompt):
-    completion = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": prompt}],
+    completion = openai.Completion.create(
+        model="davinci",
+        prompt=prompt,
         temperature=0.5,
     )
-    message = completion.choices[0].message
+
+    if completion.choices:
+        message = completion.choices[0].text
+    else:
+        message = "Error: No response from GPT-3 API"
 
     return message
