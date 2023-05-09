@@ -5,7 +5,7 @@ openai.api_key = os.getenv("OPEN_AI_API_KEY")
 
 
 def aiInitPrompt(newsPrompt, marketPrompt, industry):
-    prompt = f"Could you please give a market analysis for the {industry} industry and be as critical as possible as to highlight the key points and sentiments. Give  In general touch on the article sentiment from each publisher. Please also take note of the dates of the data provided. \n"
+    prompt = f"Give a market analysis for the {industry} industry analyze and highlight the key points and sentiments. Apply specificity to the backgrounds of the publisher, author and time of posting in relation to the sentiments of the global economy. \n"
     prompt += f"This is the current market stats : {marketPrompt}, and here are the news articles: {newsPrompt}"
 
     completion = startPrompt(prompt)
