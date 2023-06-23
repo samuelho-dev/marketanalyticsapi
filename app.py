@@ -9,8 +9,8 @@ import requests
 app = Flask(__name__)
 
 
-@app.route("/market/<marketid>", methods=["GET"])
-def fetchData(marketid):
+@app.route("/market/<marketid>", methods=["POST"])
+def fetchData(marketid, date_from, date_to):
     industry = marketid
     topCompanies = datascrape.topCompanies(industry)
 
@@ -19,7 +19,7 @@ def fetchData(marketid):
         ticker = yf.Ticker(company["code"])
         updatedCompanies.append(ticker.info)
 
-    newsInfo = news.newsInfo(updatedCompanies, industry)
+    newsInfo = news.newsInfo(updatedCompanies, industry, date_from, date_to)
     newsPrompt = infoprompt.newsPrompt(newsInfo, industry)
     marketPrompt = infoprompt.infoPrompt(updatedCompanies, industry)
     aiInitAnswer = gptprompt.aiInitPrompt(newsPrompt, marketPrompt, industry)

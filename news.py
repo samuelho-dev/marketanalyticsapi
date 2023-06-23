@@ -3,11 +3,10 @@ from dotenv import load_dotenv
 import os
 
 
-def newsInfo(updatedCompanies, industry):
+def newsInfo(updatedCompanies, industry, date_from, date_to):
     data = []
     API_KEY = os.getenv("NEWS_API_KEY")
-    dateRangeFrom = "2022-01-30"
-    dateRangeTo = "2023-01-10"
+    
     for company in updatedCompanies:
         symbol = company["symbol"]
         name = company["longName"]
@@ -15,8 +14,8 @@ def newsInfo(updatedCompanies, industry):
         URL = f"https://newsapi.org/v2/everything"
         PARAMS = {
             "q": query,
-            # "from": dateRangeFrom,
-            # "to": dateRangeTo,
+            "from": date_from,
+            "to": date_to,
             "pageSize": 2,
             "sortBy": "relevancy",
             "apiKey": API_KEY,
@@ -32,6 +31,7 @@ def newsInfo(updatedCompanies, industry):
                     "title": article["title"],
                     "description": article["description"],
                     "content": article["content"],
+                    "publishedAt": article["publishedAt"]
                 }
                 data.append(obj)
 
