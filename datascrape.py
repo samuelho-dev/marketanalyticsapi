@@ -2,29 +2,32 @@ from bs4 import BeautifulSoup
 import requests
 
 
-def industryList():
+def industry_list():
     page = requests.get("https://companiesmarketcap.com/all-categories/")
     soup = BeautifulSoup(page.content, "html.parser")
     list = soup.find("tbody")
-    tableList = list.find_all("td")
+    table_list = list.find_all("td")
     
-    industryList = []
-    for el in tableList:
-        titleSearch = el.find('a')
-        if titleSearch: 
-            industry = el.get("data-sort")
-            industryList.append(industry)
-    return industryList
+    def title_search(el) : 
+        search = el.find('a')
+        if search: 
+            return el.get("data-sort")
+            
+    result = list(map(lambda el: title_search(el), table_list))
+        
+    return result
 
-def topCompanies(industry):
+async def top_companies(industry):
     page = requests.get(f"https://companiesmarketcap.com/{industry}/largest-{industry}-companies-by-market-cap/")
     soup = BeautifulSoup(page.content, 'html.parser')
     list = soup.find('tbody')
-    tableList = list.select("td.name-td")[:5]
-    companyList = []
-    for td in tableList:
-        companyName = td.select_one("div.company-name").text.strip()
-        companyCode = td.select_one("div.company-code").text.strip()
-        companyList.append({"name" : companyName, "code": companyCode})
-    return companyList
+    table_list = list.select("td.name-td")[:5]
+    
+    def extract_company(el) : 
+        company_name = el.select_one("div.company-name").text.strip()
+        company_code = el.select_one("div.company-code").text.strip()
+        return {"name" : company_name, "code": company_code}
+    result = list(map(lambda el: extract_company(el), table_list))
+        
+    return result
 
