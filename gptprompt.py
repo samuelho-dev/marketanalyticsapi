@@ -4,16 +4,16 @@ import os
 openai.api_key = os.getenv("OPEN_AI_API_KEY")
 
 
-def aiInitPrompt(newsPrompt, marketPrompt, industry):
+def ai_init_prompt(newsPrompt, marketPrompt, industry):
     prompt = f"Give a market analysis for the {industry} industry analyze and highlight the key points and sentiments. Apply specificity to the backgrounds of the publisher, author and time of posting in relation to the sentiments of the global economy. \n"
     prompt += f"This is the current market stats : {marketPrompt}, and here are the news articles: {newsPrompt}"
 
-    completion = startPrompt(prompt)
+    completion = start_prompt(prompt)
 
     return completion
 
 
-def startPrompt(prompt):
+def start_prompt(prompt):
     completion = openai.Completion.create(
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}],
@@ -28,7 +28,7 @@ def startPrompt(prompt):
     return message
 
 
-def continuePrompt(prompt):
+def continue_prompt(prompt):
     completion = openai.Completion.create(
         model="davinci",
         prompt=prompt,
