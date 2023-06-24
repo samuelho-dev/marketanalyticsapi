@@ -1,6 +1,6 @@
 from datetime import date
 
-def infoPrompt(infoList, industry):
+def info_prompt(infoList, industry):
     today = date.today()
     marketprompt = f'This is the top {industry} companies as of {today}. Here are some key stats:\n'
     for idx, company in enumerate(infoList):
@@ -13,7 +13,7 @@ def infoPrompt(infoList, industry):
     return marketprompt
 
 
-def newsPrompt(articles, industry) :
+def news_prompt(articles, industry) :
   
   newsprompt = f'These are the news articles for the {industry} industry companies: \n'
   for article in articles: 
