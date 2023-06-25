@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 
 
-def newsInfo(updatedCompanies, industry, date_from, date_to):
+def news_info(updatedCompanies, industry, date_from, date_to):
     data = []
     API_KEY = os.getenv("NEWS_API_KEY")
     
@@ -11,7 +11,7 @@ def newsInfo(updatedCompanies, industry, date_from, date_to):
         symbol = company["symbol"]
         name = company["longName"]
         query = f"{industry} industry {symbol} {name}"
-        URL = f"https://newsapi.org/v2/everything"
+        URL = "https://newsapi.org/v2/everything"
         PARAMS = {
             "q": query,
             "from": date_from,
@@ -26,7 +26,7 @@ def newsInfo(updatedCompanies, industry, date_from, date_to):
         if results > 0:
             for article in articles:
                 obj = {
-                    "sourceName": article["source"]["name"],
+                    "sourceName": article.source.name,
                     "author": article["author"],
                     "title": article["title"],
                     "description": article["description"],

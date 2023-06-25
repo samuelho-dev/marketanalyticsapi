@@ -14,6 +14,11 @@ class Data(BaseModel):
 
 app = FastAPI()
 
+@app.get('/')
+def fetch():
+    print('hello')
+    return datascrape.industry_list()
+
 @app.get("/{industry}")
 async def fetch_data(industry : str, data : Data):
 
@@ -23,15 +28,15 @@ async def fetch_data(industry : str, data : Data):
     if not industry or not date_from or not date_to :
         return ({"error": "No data provided"}), 400
     
-    top_companies = datascrape.topCompanies(industry)
+    top_companies = datascrape.top_companies(industry)
     updated_companies = list(map(
         lambda company : yf.Ticker(company["code"]).info,
         top_companies
     ))
     
-    news_info = news.newsInfo(updated_companies, industry, date_from, date_to)
-    news_prompt = infoprompt.newsPrompt(news_info, industry)
-    market_prompt = infoprompt.infoPrompt(updated_companies, industry)
-    ai_init_answer = gptprompt.aiInitPrompt(news_prompt, market_prompt, industry)
+    news_info = news.news_info(updated_companies, industry, date_from, date_to)
+    news_prompt = infoprompt.news_prompt(news_info, industry)
+    market_prompt = infoprompt.info_prompt(updated_companies, industry)
+    ai_init_answer = gptprompt.ai_init_prompt(news_prompt, market_prompt, industry)
 
     return ai_init_answer
