@@ -12,18 +12,21 @@ def industry_list():
         search = el.find('a')
         if search and search is not None: 
             data = el.get("data-sort")
-            return data
+            href = search.get('href')
+            data = data.replace(' ', '-').replace('&', 'and').lower()
+            
+            return {"name" : data, "href" : href}
         
     result = [title_search(el) for el in table_list if title_search(el) is not None]
         
     return result
 
-async def top_companies(industry):
-    page = requests.get(f"https://companiesmarketcap.com/{industry}/largest-{industry}-companies-by-market-cap/")
-    soup = BeautifulSoup(page.content, 'html.parser')
-    list = soup.find('tbody')
-    table_list = list.select("td.name-td")[:5]
+def top_companies(url: str):
     
+    page = requests.get(f"https://companiesmarketcap.com/{url}")
+    soup = BeautifulSoup(page.content, 'html.parser')
+    body = soup.find('tbody')
+    table_list = body.select("td.name-td")[:5]
     def extract_company(el) : 
         company_name = el.select_one("div.company-name").text.strip()
         company_code = el.select_one("div.company-code").text.strip()
