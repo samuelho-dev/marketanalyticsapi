@@ -1,5 +1,8 @@
 from newsapi import NewsApiClient
+from dotenv import load_dotenv
 import os
+
+load_dotenv()
 
 newsapi = NewsApiClient(os.getenv("NEWS_API_KEY"))
 
@@ -11,13 +14,13 @@ def news_info(updatedCompanies, industry, date_from, date_to):
         query = f"{industry} industry {symbol} {name}"
         PARAMS = {
             "q": query,
-            "from": date_from,
+            "from_param": date_from,
             "to": date_to,
             "page": 2,
-            "sortBy": "relevancy",
+            "sort_by": "relevancy",
         }
-        request = newsapi.get_everything(PARAMS)
-        print(request)
+        request = newsapi.get_everything(**PARAMS)
+        
         articles = request.json()["articles"]
         results = request.json()["totalResults"]
         if results > 0:
